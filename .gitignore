@@ -8,3 +8,8 @@
 /.vs/SmartHome/v15
 /net/obj
 /node/SmartHomeJS.njsproj.user
+/net/bin/Debug/netcoreapp2.0
+/SmartHomeUniversal/SmartHomeUniversal/obj/Debug/netstandard2.0
+/SmartHomeUniversal/SmartHomeUniversal.Android/obj/Debug
+/SmartHomeUniversal/SmartHomeUniversal.iOS/obj/iPhone/Debug
+/SmartHomeUniversal/SmartHomeUniversal.UWP/obj/x86/Debug
