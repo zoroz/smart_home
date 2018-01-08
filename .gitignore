@@ -5,3 +5,6 @@
 /net/.vs/SmartHome/v15
 /net/SmartHome/bin/Debug/netcoreapp2.0
 /net/SmartHome/obj
+/.vs/SmartHome/v15
+/net/obj
+/node/SmartHomeJS.njsproj.user
