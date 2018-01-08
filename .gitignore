@@ -1,0 +1,7 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/net/.vs/SmartHome/v15
+/net/SmartHome/bin/Debug/netcoreapp2.0
+/net/SmartHome/obj
