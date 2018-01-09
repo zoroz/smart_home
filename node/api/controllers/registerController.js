@@ -1,5 +1,11 @@
 'use strict';
 
+var wlan = require('./wlan')();
+
+exports.listAvailableDevices = function(req, res) {
+    
+}
+
 exports.listRegisteredDevices = function(req, res) {
   res.json("ok");
 };

@@ -17,6 +17,7 @@ emitter.call(this);
 }
 
 inherits(Sonoff, emitter);
+
 Sonoff.prototype.init = function init() {
  var self = this;
  self._initialized = false;
@@ -25,6 +26,7 @@ Sonoff.prototype.init = function init() {
     
  self._inithttps(self);
 };
+
 Sonoff.prototype.pair = function (force, ssid, pwd) {
  var self = this;
  var apSSID = "ITEAD-10000";
@@ -152,6 +154,7 @@ var _initDevice = (self, nic, ssid, pwd, force) => {
   }
  });
 };
+
 Sonoff.prototype._initServer = (self) => {
  wlan.getNic().then(n => {
   self._nic = n[0];
@@ -177,6 +180,7 @@ break;
   }
  });
 };
+
 Sonoff.prototype._initws = (self, ip, port)=>{
     var options = {
         secure : true,

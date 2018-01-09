@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SmartHome.WebSockets;
+using WebSocketMiddleware = Microsoft.AspNetCore.WebSockets.WebSocketMiddleware;
 
 namespace SOnOffServer
 {
@@ -24,6 +26,7 @@ namespace SOnOffServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddTransient<WebSocketRequestHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -33,8 +36,10 @@ namespace SOnOffServer
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseMvc();
+            app.UseWebSockets();
+            app.UseMiddleware<WebSocketMiddleware>();
+            app.UseMvc()
+                .UseWebSockets(new WebSocketOptions());
         }
     }
 }
