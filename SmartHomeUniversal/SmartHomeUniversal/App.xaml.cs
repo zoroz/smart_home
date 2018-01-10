@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using SmartHomeUniversal.PageModels;
 using Xamarin.Forms;
 
 namespace SmartHomeUniversal
@@ -13,7 +9,7 @@ namespace SmartHomeUniversal
 		{
 			InitializeComponent();
 
-			MainPage = new SmartHomeUniversal.MainPage();
+			MainPage = FreshMvvm.FreshPageModelResolver.ResolvePageModel<MainPageModel>();
 		}
 
 		protected override void OnStart ()

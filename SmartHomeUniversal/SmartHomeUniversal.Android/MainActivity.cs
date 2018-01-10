@@ -6,6 +6,8 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using SmartHomeUniversal.Business;
+using SmartHomeUniversal.Droid.Business;
 
 namespace SmartHomeUniversal.Droid
 {
@@ -16,7 +18,7 @@ namespace SmartHomeUniversal.Droid
         {
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
-
+            FreshMvvm.FreshIOC.Container.Register<IWifiFacade, AndroidWifiFacade>().AsSingleton();
             base.OnCreate(bundle);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
