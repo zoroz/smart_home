@@ -23,3 +23,6 @@
 /SmartHomeUniversal/SmartHomeUniversal.Android/SmartHomeUniversal.Android.csproj.user
 /.vs/SmartHomeUniversal/v15/.suo
 /.vs/SmartHomeUniversal/v15/Server/sqlite3
+/SmartHomeUniversal/SmartHomeUniversal.iOS/bin/iPhone/Debug
+/SmartHomeUniversal/SmartHomeUniversal.iOS/SmartHomeUniversal.iOS.csproj.user
+/node

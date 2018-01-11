@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Net.Wifi;
@@ -15,7 +12,6 @@ namespace SmartHomeUniversal.Droid.Business
     {
         private static WifiManager _wifiManager;
         private readonly Context _context;
-        private TaskCompletionSource<IList<ScanResult>> _tcs;
         public ObservableCollection<WifiDevice> Available { get; } = new ObservableCollection<WifiDevice>();
 
         public AndroidWifiFacade()
@@ -24,28 +20,31 @@ namespace SmartHomeUniversal.Droid.Business
             _wifiManager = (WifiManager)_context.GetSystemService(Context.WifiService);
         }
 
-        public async Task<List<WifiDevice>> List()
+        public void List()
         {
-            WifiReceiver wifiReceiver = new WifiReceiver();
+            WifiReceiver wifiReceiver = new WifiReceiver(Available);
 
             _context.RegisterReceiver(wifiReceiver, new IntentFilter(WifiManager.ScanResultsAvailableAction));
             _wifiManager.StartScan();
-
-            //var res = await _tcs.Task;
-            //return res.Select(i => new WifiDevice() { Name = i.Ssid }).ToList();
-            return new List<WifiDevice>();
         }
 
         class WifiReceiver : BroadcastReceiver
         {
+            private readonly ObservableCollection<WifiDevice> _available;
+
+            public WifiReceiver(ObservableCollection<WifiDevice> available)
+            {
+                _available = available;
+            }
+
             public override void OnReceive(Context context, Intent intent)
             {
                 var wifiManager = (WifiManager)context.GetSystemService(Context.WifiService);
-                var message = string.Join("\r\n", wifiManager.ScanResults
-                    .Select(r => $"{r.Bssid} - {r.Level} dB"));
-                
-                    Debug.WriteLine($"Wifis found:[{message}]");
-                
+                foreach (ScanResult result in wifiManager.ScanResults)
+                {
+                    if(_available.All(i => i.Name != result.Ssid))
+                        _available.Add(new WifiDevice() {Name = result.Ssid});
+                }
             }
         }
     }

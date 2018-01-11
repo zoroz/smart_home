@@ -3790,6 +3790,9 @@ namespace SmartHomeUniversal.Droid
 			// aapt resource value: 0x7f090013
 			public const int mr_user_route_category_name = 2131296275;
 			
+			// aapt resource value: 0x7f090041
+			public const int ok = 2131296321;
+			
 			// aapt resource value: 0x7f090039
 			public const int password_toggle_content_description = 2131296313;
 			
@@ -3804,6 +3807,15 @@ namespace SmartHomeUniversal.Droid
 			
 			// aapt resource value: 0x7f09003d
 			public const int path_password_strike_through = 2131296317;
+			
+			// aapt resource value: 0x7f09003e
+			public const int permision_available_camera = 2131296318;
+			
+			// aapt resource value: 0x7f090040
+			public const int permission_camera_rationale = 2131296320;
+			
+			// aapt resource value: 0x7f09003f
+			public const int permissions_not_granted = 2131296319;
 			
 			// aapt resource value: 0x7f090028
 			public const int search_menu_title = 2131296296;

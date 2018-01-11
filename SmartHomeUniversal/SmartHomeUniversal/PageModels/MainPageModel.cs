@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using FreshMvvm;
 using SmartHomeUniversal.Business;
 using SmartHomeUniversal.Models;
@@ -10,7 +12,7 @@ namespace SmartHomeUniversal.PageModels
     {
         private readonly IWifiFacade _wifiFacade;
 
-        public List<WifiDevice> Items { get; } = new List<WifiDevice>();
+        public ObservableCollection<WifiDevice> Items { get; } = new ObservableCollection<WifiDevice>();
 
         public MainPageModel(IWifiFacade wifiFacade)
         {
@@ -21,8 +23,8 @@ namespace SmartHomeUniversal.PageModels
         {
             get
             {
-                return new Command(async () => {
-                        await _wifiFacade.List();
+                return new Command(() => {
+                    _wifiFacade.List();
                     }
                 );
             }
@@ -31,8 +33,17 @@ namespace SmartHomeUniversal.PageModels
         public override void Init(object initData)
         {
             base.Init(initData);
-            //var res = _wifiFacade.List().Result;
-            //Items.AddRange(res);
+            _wifiFacade.Available.CollectionChanged += (sender, args) =>
+            {
+                if (args.Action != NotifyCollectionChangedAction.Add)
+                    return;
+
+                foreach (WifiDevice device in args.NewItems)
+                {
+                    Items.Add(device);
+                }
+            };
+
         }
     }
 }
