@@ -44,7 +44,15 @@ namespace SmartHomeUniversal.PageModels
             }
         }
 
-        public WifiDevice SelectedItem { get; set; }
+        private WifiDevice _selectedItem;
+        public WifiDevice SelectedItem {
+            get => _selectedItem;
+            set
+            {
+                _selectedItem = value;
+                _wifiFacade.Connect(value);
+            }
+        }
 
         public override void Init(object initData)
         {

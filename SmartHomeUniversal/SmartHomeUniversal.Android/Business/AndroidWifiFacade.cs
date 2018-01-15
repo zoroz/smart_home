@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using Android.App;
 using Android.Content;
@@ -31,24 +30,17 @@ namespace SmartHomeUniversal.Droid.Business
 
         public void Connect(WifiDevice item)
         {
-            _wifiManager.AddNetwork(new WifiConfiguration
+            var config = new WifiConfiguration
             {
                 Ssid = item.Name,
                 PreSharedKey = "\"12345678\""
-            });
+            };
 
-            var list = _wifiManager.ConfiguredNetworks;
-            foreach (WifiConfiguration configuration in list)
-            {
-                if (configuration.Ssid != null && configuration.Ssid.Equals($"\"{item.Name}\""))
-                {
-                    _wifiManager.Disconnect();
-                    _wifiManager.EnableNetwork(configuration.NetworkId, true);
-                    _wifiManager.Reconnect();
+            _wifiManager.AddNetwork(config);
 
-                    break;
-                }
-            }
+            _wifiManager.Disconnect();
+            _wifiManager.EnableNetwork(config.NetworkId, true);
+            _wifiManager.Reconnect();
         }
 
         class WifiReceiver : BroadcastReceiver
