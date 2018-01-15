@@ -7,7 +7,7 @@
             <Label Text="Click for wifi list!"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
-            <ListView ItemsSource="{Binding Items}">
+            <ListView ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <TextCell Text="{Binding Name}" />

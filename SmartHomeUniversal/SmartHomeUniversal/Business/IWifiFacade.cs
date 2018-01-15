@@ -9,5 +9,6 @@ namespace SmartHomeUniversal.Business
     {
         ObservableCollection<WifiDevice> Available { get; }
         void List();
+        void Connect(WifiDevice item);
     }
 }

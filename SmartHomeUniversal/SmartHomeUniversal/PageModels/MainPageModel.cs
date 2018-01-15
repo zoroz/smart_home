@@ -30,6 +30,22 @@ namespace SmartHomeUniversal.PageModels
             }
         }
 
+        public Command ConnectCommand
+        {
+            get
+            {
+                return new Command(() =>
+                {
+                    if (SelectedItem == null)
+                        return;
+
+                    _wifiFacade.Connect(SelectedItem);
+                });
+            }
+        }
+
+        public WifiDevice SelectedItem { get; set; }
+
         public override void Init(object initData)
         {
             base.Init(initData);
