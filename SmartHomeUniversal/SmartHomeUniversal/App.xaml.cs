@@ -1,4 +1,5 @@
-﻿using SmartHomeUniversal.PageModels;
+﻿using FreshMvvm;
+using SmartHomeUniversal.PageModels;
 using Xamarin.Forms;
 
 namespace SmartHomeUniversal
@@ -9,8 +10,17 @@ namespace SmartHomeUniversal
 		{
 			InitializeComponent();
 
-			MainPage = FreshMvvm.FreshPageModelResolver.ResolvePageModel<MainPageModel>();
+			MasterDetailNavigation();
 		}
+
+	    public void MasterDetailNavigation()
+	    {
+	        var masterDetailNav = new FreshMasterDetailNavigationContainer ();
+            masterDetailNav.Init ("Menu", "Menu.png");
+	        masterDetailNav.AddPage<MainPageModel> ("Home", null);
+	        masterDetailNav.AddPage<TestPageModel> ("Test page", null);
+	        MainPage = masterDetailNav;
+	    }
 
 		protected override void OnStart ()
 		{
