@@ -1,9 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
+using System.Net.Http;
 using FreshMvvm;
+using Newtonsoft.Json;
 using SmartHomeUniversal.Business;
 using SmartHomeUniversal.Models;
+using SmartHomeUniversal.Models.SOnOff;
 using Xamarin.Forms;
 
 namespace SmartHomeUniversal.PageModels
@@ -51,6 +56,32 @@ namespace SmartHomeUniversal.PageModels
             {
                 _selectedItem = value;
                 _wifiFacade.Connect(value);
+
+                Items.Clear();
+
+                try
+                {
+                    HttpClient c = new HttpClient();
+                    var t = c.GetAsync("http://10.10.7.1/device").Result;
+                    string res = t.Content.ReadAsStringAsync().Result;
+                    Debug.WriteLine(res);
+
+                    DeviceInfo device = JsonConvert.DeserializeObject<DeviceInfo>(res);
+
+                    c.PostAsync("http://10.10.7.1/ap",
+                        new StringContent(JsonConvert.SerializeObject(new ConfigureDevice()
+                        {
+                            Password = "ActiveBit",
+                            Ssid = "asus",
+                            Version = 4,
+                            Port = 8082,
+                            ServerName = "192.168.1.10"
+                        })));
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
             }
         }
 

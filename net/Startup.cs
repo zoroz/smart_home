@@ -36,10 +36,10 @@ namespace SOnOffServer
             {
                 app.UseDeveloperExceptionPage();
             }
+
             app.UseWebSockets();
             app.UseMiddleware<WebSocketMiddleware>();
-            app.UseMvc()
-                .UseWebSockets(new WebSocketOptions());
+            app.UseMvc();
         }
     }
 }
