@@ -4,6 +4,7 @@ using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace SmartHome.WebSockets
 {
@@ -14,9 +15,16 @@ namespace SmartHome.WebSockets
 
     public class WebSocketRequestHandler : IWebSocketRequestHandler
     {
+        private readonly ILogger<WebSocketRequestHandler> _log;
+
+        public WebSocketRequestHandler(ILogger<WebSocketRequestHandler> log)
+        {
+            _log = log;
+        }
 
         public async Task Handle(HttpContext context, WebSocket webSocket)
         {
+            _log.LogInformation("Handling web socket");
             /*We define a certain constant which will represent
             size of received data. It is established by us and 
             we can set any value. We know that in this case the size of the sent
@@ -32,6 +40,7 @@ namespace SmartHome.WebSockets
             //Checks WebSocket state.
             while (webSocket.State == WebSocketState.Open)
             {
+                
                 //Reads data.
                 WebSocketReceiveResult webSocketReceiveResult =
                     await webSocket.ReceiveAsync(receivedDataBuffer, cancellationToken);
@@ -51,7 +60,7 @@ namespace SmartHome.WebSockets
                 string receiveString =
                     System.Text.Encoding.UTF8.GetString(payloadData, 0, payloadData.Length);
 
-                Console.WriteLine(receiveString);
+                _log.LogInformation(receiveString);
                 //todo Zoro: execute ws handler for command
             }
         }

@@ -71,10 +71,10 @@ namespace SmartHomeUniversal.PageModels
                     c.PostAsync("http://10.10.7.1/ap",
                         new StringContent(JsonConvert.SerializeObject(new ConfigureDevice()
                         {
-                            Password = "password",
+                            Password = "ActiveBit",
                             Ssid = "asus",
                             Version = 4,
-                            Port = 8082,
+                            Port = 80,
                             ServerName = "192.168.1.10"
                         })));
                 }

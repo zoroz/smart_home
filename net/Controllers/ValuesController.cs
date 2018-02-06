@@ -1,18 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace SOnOffServer.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
+        private readonly ILogger<ValuesController> _log;
+
+        public ValuesController(ILogger<ValuesController> log)
+        {
+            _log = log;
+        }
+
         // GET api/values
         [HttpGet]
         public IEnumerable<string> Get()
         {
+            Console.Write("Console");
+            Debug.WriteLine("Debug");
+            _log.LogInformation("logger");
             return new string[] { "value1", "value2" };
         }
 
