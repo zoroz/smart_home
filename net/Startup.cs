@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
@@ -10,11 +8,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using SmartHome.Facade;
 using SmartHome.WebSockets;
-using WebSocketMiddleware = Microsoft.AspNetCore.WebSockets.WebSocketMiddleware;
+using Swashbuckle.AspNetCore.Swagger;
 
-namespace SOnOffServer
+namespace SmartHome
 {
     public class Startup
     {
@@ -31,8 +29,15 @@ namespace SOnOffServer
             services.AddLogging();
             services.AddMvc();
             
-            services.AddTransient<WebSocketRequestHandler>();
+            //services.AddTransient<WebSocketRequestHandler>();
+            services.AddSingleton<ISeltronFacade, SeltronFacade>();
             //services.AddTransient<WebSocketMiddleware>();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "Smart home", Version = "v1" });
+                c.DescribeAllEnumsAsStrings();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,32 +47,36 @@ namespace SOnOffServer
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseWebSockets();
-            app.Map("", builder =>
+            //app.UseWebSockets();
+            //app.Map("", builder =>
 
-            {
+            //{
 
-                builder.Use(async (context, next) =>
+            //    builder.Use(async (context, next) =>
 
-                {
+            //    {
 
-                    if (context.WebSockets.IsWebSocketRequest)
+            //        if (context.WebSockets.IsWebSocketRequest)
 
-                    {
+            //        {
 
-                        var webSocket = await context.WebSockets.AcceptWebSocketAsync();
-                        var log = context.RequestServices.GetService<ILogger<WebSocketRequestHandler>>();
-                        await Echo(log, webSocket);
+            //            var webSocket = await context.WebSockets.AcceptWebSocketAsync();
+            //            var log = context.RequestServices.GetService<ILogger<WebSocketRequestHandler>>();
+            //            await Echo(log, webSocket);
 
-                        return;
+            //            return;
 
-                    }
+            //        }
 
-                    await next();
+            //        await next();
 
-                });
+            //    });
 
-            });
+            //});
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Smart home V1"));
+
             app.UseMvc();
         }
 
