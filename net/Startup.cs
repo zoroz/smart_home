@@ -31,6 +31,7 @@ namespace SmartHome
             
             //services.AddTransient<WebSocketRequestHandler>();
             services.AddSingleton<ISeltronFacade, SeltronFacade>();
+            services.AddSingleton<ISOnOffFacade, SOnOffFacade>();
             //services.AddTransient<WebSocketMiddleware>();
 
             services.AddSwaggerGen(c =>

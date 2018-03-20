@@ -6,14 +6,14 @@ using SmartHome.Facade;
 namespace SmartHome.Controllers
 {
     [Route("api/[controller]")]
-    public class SeltronController : Controller
+    public class SOnOffController : Controller
     {
-        private readonly ISeltronFacade _seltronFacade;
-        private readonly ILogger<SeltronController> _log;
+        private readonly ISOnOffFacade _sOnOffFacade;
+        private readonly ILogger<SOnOffController> _log;
 
-        public SeltronController(ISeltronFacade seltronFacade, ILogger<SeltronController> log)
+        public SOnOffController(ISOnOffFacade sOnOffFacade, ILogger<SOnOffController> log)
         {
-            _seltronFacade = seltronFacade;
+            _sOnOffFacade = sOnOffFacade;
             _log = log;
         }
 
@@ -21,7 +21,7 @@ namespace SmartHome.Controllers
         [HttpGet]
         public async Task<string> Login([FromQuery]string userName, [FromQuery]string password)
         {
-            var res = await _seltronFacade.Login(userName, password);
+            var res = await _sOnOffFacade.Login(userName, password);
             return "OK";
         }
 
