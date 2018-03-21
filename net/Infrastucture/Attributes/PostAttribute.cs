@@ -9,9 +9,6 @@ namespace SmartHome.Infrastucture.Attributes
         {
         }
 
-        public override HttpMethod Method
-        {
-            get { return HttpMethod.Post; }
-        }
+        public override HttpMethod Method => HttpMethod.Post;
     }
 }

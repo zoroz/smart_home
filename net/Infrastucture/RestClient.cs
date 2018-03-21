@@ -13,7 +13,7 @@ using SmartHome.Infrastucture.Attributes;
 
 namespace SmartHome.Infrastucture
 {
-    public class RestClient
+    public class RestClient : IRestClient
     {
         private string _webApiBaseUrl;
 
@@ -55,24 +55,24 @@ namespace SmartHome.Infrastucture
 
         protected HttpClient Client { get; set; }
 
-        internal async Task<TResponse> SendAsync<TResponse>([CallerMemberName] string memberName = "")
+        public async Task<TResponse> SendAsync<TResponse>([CallerMemberName] string memberName = "")
             where TResponse : new()
         {
             return await SendAsync<TResponse>(null, memberName);
         }
 
-        internal async Task SendAsync(object request, [CallerMemberName] string memberName = "",
+        public async Task SendAsync(object request, [CallerMemberName] string memberName = "",
             string queryString = null, bool deleteFromBody = false)
         {
             await SendAsync<Void>(request, memberName, queryString);
         }
 
-        internal async Task SendAsync([CallerMemberName] string memberName = "")
+        public async Task SendAsync([CallerMemberName] string memberName = "")
         {
             await SendAsync<Void>(null, memberName);
         }
 
-        internal async Task<TResponse> SendAsync<TResponse>(object request, [CallerMemberName] string memberName = "", string queryString = null)
+        public async Task<TResponse> SendAsync<TResponse>(object request, [CallerMemberName] string memberName = "", string queryString = null)
             where TResponse : new()
         {
             var method = _methods[memberName];
