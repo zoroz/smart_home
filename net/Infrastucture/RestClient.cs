@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using SmartHome.Facade;
 using SmartHome.Infrastucture.Attributes;
 
 namespace SmartHome.Infrastucture
@@ -158,7 +159,8 @@ namespace SmartHome.Infrastucture
 
         protected void GetAllClientMethods()
         {
-            AddMethods(GetType().GetRuntimeMethods());
+            //// Todo get methods.
+            AddMethods(typeof(SOnOffFacade).GetRuntimeMethods());
         }
 
         private void AddMethods(IEnumerable<MethodInfo> methodsList)

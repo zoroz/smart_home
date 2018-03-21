@@ -7,5 +7,6 @@ namespace SmartHome.Infrastucture
 {
     public interface IRestClientFactory
     {
+        IRestClient Create(string endpoint);
     }
 }
