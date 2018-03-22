@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
+using Microsoft.Extensions.Options;
 using SmartHome.Contracts.SOnOff;
-using SmartHome.Infrastucture;
-using SmartHome.Infrastucture.Attributes;
+using SmartHome.Options;
 
 namespace SmartHome.Facade
 {
@@ -18,28 +12,31 @@ namespace SmartHome.Facade
         Task<LoginResponse> Login(string userName, string password);
     }
 
-    public class SOnOffFacade : ISOnOffFacade
+    public class SOnOffFacade : JsonHttpClient, ISOnOffFacade
     {
-        private IRestClient _restClient;
+        public SOnOffFacade(IOptions<SOnOffHttpClientOptions> options) : base(options)
+        { }
 
-        public SOnOffFacade(IRestClientFactory restClientFactory)
-        {
-            _restClient = restClientFactory.Create("https://api.coolkit.cc:8080/api");
-        }
-
-        [Post("user/login")]
         public async Task<LoginResponse> Login(string userName, string password)
         {
-           return await _restClient.SendAsync<LoginResponse>(new LoginRequest
+            return await PostAsync<LoginRequest, LoginResponse>("user/login", new LoginRequest
             {
                 Appid = "oeVkj2lYFGnJu5XUtWisfW4utiN4u9Mq",
                 Nonce = "u2omanuc",
                 Os = "Android",
                 Password = password,
-                Ts = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
+                Ts = (Int32) (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
                 Version = 6,
                 Email = userName
             });
+        }
+
+        protected override void AddDefaultRequestHeaders(HttpRequestHeaders defaultRequestHeaders)
+        {
+            base.AddDefaultRequestHeaders(defaultRequestHeaders);
+
+            if (defaultRequestHeaders.Authorization == null)
+                defaultRequestHeaders.Authorization = new AuthenticationHeaderValue("sign", "qvpP9CHX/PUccoFpbpRzDPmFe2PVYZ2pATCP/3kzyMk=");
         }
     }
 
