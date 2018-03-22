@@ -11,4 +11,7 @@
 
     public class SOnOffHttpClientOptions : HttpClientOptions
     { }
+
+    public class SeltronHttpClientOptions : HttpClientOptions
+    { }
 }

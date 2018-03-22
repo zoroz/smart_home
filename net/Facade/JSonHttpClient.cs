@@ -38,6 +38,14 @@ namespace SmartHome.Facade
             return DeserializeInternal<TResponse>(stream);
         }
 
+        protected async Task<TResponse> GetAsync<TResponse>(string url) where TResponse : class
+        {
+            AddDefaultRequestHeaders(DefaultRequestHeaders);
+            HttpResponseMessage response = await GetAsync(url);
+            Stream stream = await GetStreamAndTraceResponseAsync(response);
+            return DeserializeInternal<TResponse>(stream);
+        }
+
         protected virtual void AddDefaultRequestHeaders(HttpRequestHeaders defaultRequestHeaders)
         {
             defaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
