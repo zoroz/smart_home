@@ -17,7 +17,6 @@ namespace SmartHome.Facade
     {
         public SOnOffFacade(IOptions<SOnOffHttpClientOptions> options) : base(options)
         {
-            BaseAddress = new Uri("https://api.coolkit.cc:8080/api/");
         }
 
         [Post("user/login")]

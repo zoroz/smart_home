@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SmartHome.Facade;
 using SmartHome.Infrastucture;
+using SmartHome.Options;
 using SmartHome.WebSockets;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -37,6 +38,8 @@ namespace SmartHome
             services.AddSingleton<IHttpClientFactory, HttpClientFactory>();
             //services.AddTransient<WebSocketMiddleware>();
 
+            services.Configure<SOnOffHttpClientOptions>(options =>Configuration.GetSection(nameof(SOnOffHttpClientOptions)).Bind(options));
+         
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "Smart home", Version = "v1" });

@@ -18,7 +18,6 @@ namespace SmartHome.Facade
     {
         public SeltronFacade(IOptions<SeltronHttpClientOptions> options) : base(options)
         {
-            BaseAddress = new Uri("https://seltronhome.eu.auth0.com/");
         }
 
         [Post("oauth/token")]
