@@ -25,7 +25,7 @@ namespace SmartHome.Infrastucture
                 return client;
             }
 
-            client = new RestClient(_httpClientFactory.Create(endpoint));
+            client = new RestClient();
             _clients[endpoint] = client;
 
             return client;

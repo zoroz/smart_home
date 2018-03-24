@@ -1,7 +1,9 @@
-﻿using System.Net.Http.Headers;
+﻿using System;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using SmartHome.Contracts.Seltron;
+using SmartHome.Infrastucture.Attributes;
 using SmartHome.Options;
 
 
@@ -16,11 +18,13 @@ namespace SmartHome.Facade
     {
         public SeltronFacade(IOptions<SeltronHttpClientOptions> options) : base(options)
         {
+            BaseAddress = new Uri("https://seltronhome.eu.auth0.com/");
         }
 
-        public Task<LoginResponse> Login(string userName, string password)
+        [Post("oauth/token")]
+        public async Task<LoginResponse> Login(string userName, string password)
         {
-            return PostAsync<LoginRequest, LoginResponse>("login", new LoginRequest
+            return await SendAsync<LoginResponse>(new LoginRequest
             {
                 Audience = "https://api.seltronhome.com",
                 ClientId = "lbO893m2FNTundKaTrRM00jTw5LTLMz2",
@@ -30,7 +34,6 @@ namespace SmartHome.Facade
                 Scope = "openid offline_access",
                 Username = userName
             });
-
         }
 
         protected override void AddDefaultRequestHeaders(HttpRequestHeaders defaultRequestHeaders)
