@@ -34,3 +34,5 @@ SmartHome.Model/obj/Debug/netstandard1.6/SmartHome.Model.csproj.CoreCompileInput
 SmartHome.Model/obj/
 RestClient/obj/
 RestClient/bin/
+SmartHome.Client/obj/
+SmartHome.Client/bin/
