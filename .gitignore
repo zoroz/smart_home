@@ -29,3 +29,6 @@
 /net/SmartHome.csproj.user
 /net/bin
 UpgradeLog.htm
+SmartHome.Model/bin/
+SmartHome.Model/obj/Debug/netstandard1.6/SmartHome.Model.csproj.CoreCompileInputs.cache
+SmartHome.Model/obj/
