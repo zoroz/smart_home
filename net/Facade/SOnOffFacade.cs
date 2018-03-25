@@ -2,8 +2,9 @@
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using RestClient.Attributes;
 using SmartHome.Contracts.SOnOff;
-using SmartHome.Infrastucture.Attributes;
+
 using SmartHome.Options;
 
 namespace SmartHome.Facade

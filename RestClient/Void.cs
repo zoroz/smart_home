@@ -1,4 +1,4 @@
-﻿namespace SmartHome.Infrastucture
+﻿namespace RestClient
 {
     internal class Void
     {

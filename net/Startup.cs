@@ -34,8 +34,6 @@ namespace SmartHome
             //services.AddTransient<WebSocketRequestHandler>();
             services.AddSingleton<ISeltronFacade, SeltronFacade>();
             services.AddSingleton<ISOnOffFacade, SOnOffFacade>();
-            services.AddSingleton<IRestClientFactory, RestClientFactory>();
-            services.AddSingleton<IHttpClientFactory, HttpClientFactory>();
             //services.AddTransient<WebSocketMiddleware>();
 
             services.Configure<SOnOffHttpClientOptions>(options =>Configuration.GetSection(nameof(SOnOffHttpClientOptions)).Bind(options));

@@ -7,12 +7,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using RestClient;
 using SmartHome.Infrastucture;
 using SmartHome.Options;
 
 namespace SmartHome.Facade
 {
-    public abstract class JsonHttpClient : RestClient
+    public abstract class JsonHttpClient : RestClient.RestClient
     {
         protected JsonHttpClient(IOptions<HttpClientOptions> options) : base(options)
         {

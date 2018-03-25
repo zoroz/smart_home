@@ -10,11 +10,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using SmartHome.Facade;
-using SmartHome.Infrastucture.Attributes;
-using SmartHome.Options;
+using RestClient.Attributes;
 
-namespace SmartHome.Infrastucture
+namespace RestClient
 {
     public class RestClient : HttpClient, IRestClient
     {

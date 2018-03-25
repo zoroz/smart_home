@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 
-namespace SmartHome.Infrastucture.Attributes
+namespace RestClient.Attributes
 {
     public abstract class HttpAttribute : Attribute
     {
