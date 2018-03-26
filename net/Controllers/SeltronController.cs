@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SmartHome.Facade;
+using SmartHome.Model;
 
 namespace SmartHome.Controllers
 {
@@ -19,9 +20,9 @@ namespace SmartHome.Controllers
 
         // GET api/values
         [HttpGet]
-        public async Task<string> Login([FromQuery]string userName, [FromQuery]string password)
+        public async Task<string> Login(LoginRequest request)
         {
-            var res = await _seltronFacade.Login(userName, password);
+            var res = await _seltronFacade.Login(request.Username, request.Password);
             return "OK";
         }
 

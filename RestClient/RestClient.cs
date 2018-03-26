@@ -8,52 +8,37 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using SmartHome.Facade;
-using SmartHome.Infrastucture.Attributes;
+using RestClient.Attributes;
 
-namespace SmartHome.Infrastucture
+namespace RestClient
 {
-    public class RestClient : IRestClient
+    public class RestClient : HttpClient, IRestClient
     {
-        private string _webApiBaseUrl;
+        private readonly HttpClientOptions _options;
 
         private Dictionary<string, MethodInfo> _methods = new Dictionary<string, MethodInfo>();
 
-        public RestClient(HttpClient httpClient)
+        public RestClient() 
         {
-            Client = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-            if (httpClient.BaseAddress != null)
-            {
-                _webApiBaseUrl = httpClient.BaseAddress.ToString();
-                if (!_webApiBaseUrl.EndsWith("/"))
-                {
-                    _webApiBaseUrl = $"{_webApiBaseUrl}/";
-                }
-            }
-
             GetAllClientMethods();
         }
 
-        public string Token { get; set; }
-
-        public string WebApiBaseUrl
+        public RestClient(IOptions<HttpClientOptions> options) : base(new HttpClientHandler
         {
-            get => _webApiBaseUrl;
-
-            set
-            {
-                _webApiBaseUrl = value;
-                Client.BaseAddress = new Uri(value);
-            }
-        }
-
-        public TimeSpan Timeout
+            Proxy = CreateProxy(options.Value.Proxy)
+        })
         {
-            get => Client.Timeout;
-            set => Client.Timeout = value;
-        }
+            _options = options.Value;
+            Timeout = TimeSpan.FromSeconds(Math.Max(_options.Timeout, 10));
 
+            if (!string.IsNullOrEmpty(_options.BaseUrl))
+                BaseAddress = new Uri(_options.BaseUrl);
+
+            GetAllClientMethods();
+        }
+        
         protected HttpClient Client { get; set; }
 
         public async Task<TResponse> SendAsync<TResponse>([CallerMemberName] string memberName = "")
@@ -62,8 +47,7 @@ namespace SmartHome.Infrastucture
             return await SendAsync<TResponse>(null, memberName);
         }
 
-        public async Task SendAsync(object request, [CallerMemberName] string memberName = "",
-            string queryString = null, bool deleteFromBody = false)
+        public async Task SendAsync(object request, [CallerMemberName]string memberName = "", string queryString = null, bool deleteFromBody = false)
         {
             await SendAsync<Void>(request, memberName, queryString);
         }
@@ -88,10 +72,9 @@ namespace SmartHome.Infrastucture
 
             HttpRequestMessage requestMessage = new HttpRequestMessage();
             requestMessage.Method = attribute.Method;
-            //// todo 
-            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("sign", "qvpP9CHX/PUccoFpbpRzDPmFe2PVYZ2pATCP/3kzyMk=");
-            if (attribute.Method == HttpMethod.Post || attribute.Method == HttpMethod.Put ||
-                (attribute.Method == HttpMethod.Delete))
+            AddDefaultRequestHeaders(DefaultRequestHeaders);
+           
+            if (attribute.Method == HttpMethod.Post || attribute.Method == HttpMethod.Put || (attribute.Method == HttpMethod.Delete))
             {
                 if (request != null)
                 {
@@ -99,9 +82,6 @@ namespace SmartHome.Infrastucture
                     StringContent content = new StringContent(jsonObject, Encoding.UTF8, "application/json");
                     requestMessage.Content = content;
                 }
-
-                Client.DefaultRequestHeaders.Accept.Clear();
-                Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             }
             else
             {
@@ -111,13 +91,21 @@ namespace SmartHome.Infrastucture
                 }
             }
 
-            var uri = new Uri(string.Format("{0}{1}{2}", WebApiBaseUrl, relativePath, queryString));
+            var uri = BaseAddress != null 
+                ? new Uri(string.Format("{0}{1}{2}", BaseAddress, relativePath, queryString)) 
+                : new Uri(string.Format("{0}{1}", relativePath, queryString));
+
             requestMessage.RequestUri = uri;
-            var responseMessage = await Client.SendAsync(requestMessage);
+            var responseMessage = await base.SendAsync(requestMessage);
             return await GetResponse<TResponse>(responseMessage);
         }
 
-        protected async Task<T> GetResponse<T>(HttpResponseMessage response)
+        protected virtual void AddDefaultRequestHeaders(HttpRequestHeaders defaultRequestHeaders)
+        {
+            defaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        }
+
+        protected virtual async Task<T> GetResponse<T>(HttpResponseMessage response)
             where T : new()
         {
             if (response.StatusCode != HttpStatusCode.OK)
@@ -159,16 +147,24 @@ namespace SmartHome.Infrastucture
 
         protected void GetAllClientMethods()
         {
-            //// Todo get methods.
-            AddMethods(typeof(SOnOffFacade).GetRuntimeMethods());
+            AddMethods(GetType().GetRuntimeMethods());
         }
 
-        private void AddMethods(IEnumerable<MethodInfo> methodsList)
+        private static IWebProxy CreateProxy(string proxy)
+        {
+            if (string.IsNullOrEmpty(proxy))
+                return null;
+
+            return new WebProxy(proxy);
+        }
+
+    private void AddMethods(IEnumerable<MethodInfo> methodsList)
         {
             string[] exclude = new[]
             {
-                "ToString", "Equals", "GetHashCode", "GetType", "Finalize", "MemberwiseClone",
-                nameof(RestClient.SendAsync)
+                "Finalize", nameof(Dispose), nameof(GetHashCode), nameof(GetType),  nameof(MemberwiseClone), nameof(GetStringAsync),
+                nameof(SendAsync), nameof(GetStreamAsync), nameof(GetAsync),nameof(PostAsync),
+                nameof(PutAsync),nameof(GetByteArrayAsync), nameof(DeleteAsync), nameof(Equals), nameof(ToString)
             };
 
             foreach (var method in methodsList.Where(x => !exclude.Contains(x.Name)))

@@ -2,7 +2,9 @@
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using RestClient.Attributes;
 using SmartHome.Contracts.SOnOff;
+
 using SmartHome.Options;
 
 namespace SmartHome.Facade
@@ -15,11 +17,13 @@ namespace SmartHome.Facade
     public class SOnOffFacade : JsonHttpClient, ISOnOffFacade
     {
         public SOnOffFacade(IOptions<SOnOffHttpClientOptions> options) : base(options)
-        { }
+        {
+        }
 
+        [Post("user/login")]
         public async Task<LoginResponse> Login(string userName, string password)
         {
-            return await PostAsync<LoginRequest, LoginResponse>("user/login", new LoginRequest
+            return await SendAsync<LoginResponse>(new LoginRequest
             {
                 Appid = "oeVkj2lYFGnJu5XUtWisfW4utiN4u9Mq",
                 Nonce = "u2omanuc",

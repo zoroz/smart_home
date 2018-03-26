@@ -7,24 +7,16 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using RestClient;
+using SmartHome.Infrastucture;
 using SmartHome.Options;
 
 namespace SmartHome.Facade
 {
-    public abstract class JsonHttpClient : HttpClient
+    public abstract class JsonHttpClient : RestClient.RestClient
     {
-        private readonly HttpClientOptions _options;
-
-        protected JsonHttpClient(IOptions<HttpClientOptions> options) : base(new HttpClientHandler
+        protected JsonHttpClient(IOptions<HttpClientOptions> options) : base(options)
         {
-            Proxy = CreateProxy(options.Value.Proxy)
-        })
-        {
-            _options = options.Value;
-            Timeout = TimeSpan.FromSeconds(Math.Max(_options.Timeout, 10));
-
-            if (!string.IsNullOrEmpty(_options.BaseUrl))
-                BaseAddress = new Uri(_options.BaseUrl);
         }
 
         protected async Task<TResponse> PostAsync<TRequest, TResponse>(string url, TRequest data) where TResponse : class
@@ -46,11 +38,6 @@ namespace SmartHome.Facade
             return DeserializeInternal<TResponse>(stream);
         }
 
-        protected virtual void AddDefaultRequestHeaders(HttpRequestHeaders defaultRequestHeaders)
-        {
-            defaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        }
-
         private Task<Stream> GetStreamAndTraceResponseAsync(HttpResponseMessage response)
         {
             return response.Content.ReadAsStreamAsync();
@@ -69,14 +56,6 @@ namespace SmartHome.Facade
         protected virtual void AddRequestContentHeaders(HttpContent httpContent)
         {
             httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-        }
-
-        private static IWebProxy CreateProxy(string proxy)
-        {
-            if (string.IsNullOrEmpty(proxy))
-                return null;
-
-            return new WebProxy(proxy);
         }
 
         protected virtual TResponse DeserializeInternal<TResponse>(Stream stream)

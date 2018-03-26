@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace SmartHome.Infrastucture
+namespace RestClient
 {
     public static class UrlHelpers
     {

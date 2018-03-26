@@ -1,6 +1,6 @@
 ﻿using System.Net.Http;
 
-namespace SmartHome.Infrastucture.Attributes
+namespace RestClient.Attributes
 {
     public class GetAttribute : HttpAttribute
     {
