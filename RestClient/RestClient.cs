@@ -25,6 +25,11 @@ namespace RestClient
             GetAllClientMethods();
         }
 
+        public RestClient(HttpMessageHandler handler) : base(handler)
+        {
+            GetAllClientMethods();
+        }
+
         public RestClient(IOptions<HttpClientOptions> options) : base(new HttpClientHandler
         {
             Proxy = CreateProxy(options.Value.Proxy)
@@ -38,8 +43,6 @@ namespace RestClient
 
             GetAllClientMethods();
         }
-        
-        protected HttpClient Client { get; set; }
 
         public async Task<TResponse> SendAsync<TResponse>([CallerMemberName] string memberName = "")
             where TResponse : new()
@@ -158,7 +161,7 @@ namespace RestClient
             return new WebProxy(proxy);
         }
 
-    private void AddMethods(IEnumerable<MethodInfo> methodsList)
+        public void AddMethods(IEnumerable<MethodInfo> methodsList)
         {
             string[] exclude = new[]
             {

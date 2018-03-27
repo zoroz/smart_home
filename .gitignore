@@ -37,3 +37,5 @@ RestClient/bin/
 SmartHome.Client/obj/
 SmartHome.Client/bin/
 /.vs/SmartHome/DesignTimeBuild
+SmartHome.Tests/bin/
+SmartHome.Tests/obj/

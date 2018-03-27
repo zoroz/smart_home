@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using RestClient;
 
 namespace SmartHome.Client
@@ -10,6 +11,8 @@ namespace SmartHome.Client
         public WebApiClient(IRestClient client)
         {
             _client = client;
+            client.AddMethods(GetType().GetRuntimeMethods());
+            client.AddMethods(typeof(SOnOff).GetRuntimeMethods());
         }
 
 

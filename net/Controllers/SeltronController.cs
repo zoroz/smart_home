@@ -6,7 +6,7 @@ using SmartHome.Model;
 
 namespace SmartHome.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class SeltronController : Controller
     {
         private readonly ISeltronFacade _seltronFacade;
