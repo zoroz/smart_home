@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SmartHome.Facade;
+using SmartHome.Facade.Simulator;
 using SmartHome.Infrastucture;
 using SmartHome.Options;
 using SmartHome.WebSockets;
@@ -33,7 +34,7 @@ namespace SmartHome
             
             //services.AddTransient<WebSocketRequestHandler>();
             services.AddSingleton<ISeltronFacade, SeltronFacade>();
-            services.AddSingleton<ISOnOffFacade, SOnOffFacade>();
+            services.AddSingleton<ISOnOffFacade, SOnOffSimulator>();
             //services.AddTransient<WebSocketMiddleware>();
 
             services.Configure<SOnOffHttpClientOptions>(options =>Configuration.GetSection(nameof(SOnOffHttpClientOptions)).Bind(options));
