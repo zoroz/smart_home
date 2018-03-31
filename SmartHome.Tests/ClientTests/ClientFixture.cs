@@ -10,7 +10,10 @@ namespace SmartHome.Tests.ClientTests
     {
         public ClientFixture()
         {
-            Server = new TestServer(new WebHostBuilder().UseStartup<Startup>());
+            Server = new TestServer(
+                new WebHostBuilder()
+                .UseStartup<Startup>()
+                .UseSetting("SimulatorMode", "true"));
         }
 
         public TestServer Server { get; }
