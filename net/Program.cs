@@ -19,6 +19,7 @@ namespace SmartHome
             WebHost.CreateDefaultBuilder(args)
             .UseUrls("http://localhost:8081")
                 .UseStartup<Startup>()
+                .UseSetting("SimulatorMode", "false")
                 .UseKestrel()
                 .Build();
     }

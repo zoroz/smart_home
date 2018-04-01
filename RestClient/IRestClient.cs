@@ -1,4 +1,6 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Collections.Generic;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace RestClient
@@ -15,5 +17,7 @@ namespace RestClient
 
        Task<TResponse> SendAsync<TResponse>(object request, [CallerMemberName] string memberName = "",string queryString = null)
             where TResponse : new();
+
+        void AddMethods(IEnumerable<MethodInfo> methodsList);
     }
 }
