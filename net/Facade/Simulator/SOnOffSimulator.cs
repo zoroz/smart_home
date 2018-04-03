@@ -14,5 +14,10 @@ namespace SmartHome.Facade.Simulator
             const string fileName = "Login.json";
             return Deserialize<LoginResponse>(fileName, userName);
         }
+
+        public Task<List<Device>> ListDevices(string token)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
